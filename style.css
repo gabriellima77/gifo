@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: rgb(36, 36, 36);
+  font-family: 'Poppins', sans-serif;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.header {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#logo {
+  color: white;
+  letter-spacing: 15px;
+  font-family: 'Dancing Script', cursive;
+}
+
+#searchBar {
+  position: relative;
+  display: flex;
+  left: 10%;
+  background-color: rgb(226, 226, 226);
+  width: 45vw;
+  height: 7vh;
+  margin-right: 30%;
+}
+
+#search {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+}
+
+.type {
+  position: relative;
+  box-sizing: border-box;
+  width: 17%;
+  height: 100%;
+}
+
+.flip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: .6s all ease-in-out;
+}
+
+.type-name {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  animation: btn-animation 0.4s ease-in 0s infinite;
+  position: absolute;
+  color: white;
+  background-color: #4158D0;
+  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+}
+
+.type-name.back {
+  transform: rotateY(180deg);
+}
+
+.type input{
+  z-index: 1;
+  position: absolute;
+  cursor: pointer;
+  margin: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.type input:checked + .flip {
+  transform: rotateY(180deg);
+}
+
+#container {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 70%;
+}
+
+.bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  margin-left: 10px;
+  padding: 0 10px;
+  color: white;
+}
+
+.hot {
+  color: rgb(240, 105, 15);
+  margin-right: 10px;
+}
+
+button {
+  margin-right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.change {
+  box-shadow: none;
+  width: 100px;
+  padding: 1% 0;
+  border-radius: 4px;
+  transition: .8s box-shadow ease-in-out;
+}
+
+.change:hover {
+  box-shadow: inset 0 -50px 3px 1px rgb(158, 40, 194);
+}
+
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  height: 200px;
+}
+
+.slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform .5s ease-in;
+}
+
+.next, .prev {
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  color: rgb(161, 161, 161);
+  text-shadow: 1px 1px 2px white;
+  top: 40%;
+  font-size: 30px;
+}
+
+.next i, .prev i {
+  pointer-events: none;
+}
+
+.next {
+  right: 5px;
+}
+
+.prev {
+  left: 5px;
+}
+
+.disabled {
+  display: none;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  margin-right: 10px;
+}
+
+.slide img {
+  border-radius: 5px;
+}
+
+.cap {
+  text-align: center;
+  opacity: 0;
+  position: absolute;
+  bottom: 7px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  transition: padding 0.5s ease-in-out, opacity 0.5s ease;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.slide:hover .cap {
+  opacity: 1;
+  padding-bottom: 7px;
+  user-select: none;
+}
+
+#content {
+  margin-top: 50px;
+  padding: 5% 0 5% 7%;
+  width: 100%;
+}
+
+#content figure {
+  display: inline-block;
+  position: relative;
+  margin-top: 5px;
+  width: fit-content;
+  height: fit-content;
+}
