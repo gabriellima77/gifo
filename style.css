@@ -199,13 +199,16 @@ button {
 }
 
 .slide {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   position: relative;
-  box-sizing: border-box;
   margin: 0;
   margin-right: 10px;
+  width: fit-content;
+  border-radius: 5px;
+}
+
+.slide.content {
+  position: absolute;
 }
 
 .slide img {
@@ -216,7 +219,7 @@ button {
   text-align: center;
   opacity: 0;
   position: absolute;
-  bottom: 7px;
+  bottom: 0px;
   color: white;
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -229,18 +232,54 @@ button {
   opacity: 1;
   padding-bottom: 7px;
   user-select: none;
+
 }
 
 #content {
+  position: relative;
   margin-top: 50px;
-  padding: 5% 0 5% 7%;
-  width: 100%;
+  width: 880px;
 }
 
-#content figure {
-  display: inline-block;
-  position: relative;
-  margin-top: 5px;
-  width: fit-content;
-  height: fit-content;
+.error {
+  margin-bottom: 20px;
+}
+
+.text {
+  color: white;
+  text-align: center;
+  height: 50px;
+  margin: 0;
+}
+
+.random-img {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 0;
+}
+
+.random-btn {
+  box-sizing: border-box;
+  border-radius: 5px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  margin-top: 20px;
+  width: 80px;
+  height: 40px;
+  background-color: #C850C0;
+  box-shadow: 2px 1px 2px 1px #4158D0;
+  transition: 0.3s all ease-in;
+}
+
+.random-btn:hover {
+  background-color: #b94ab2;
+}
+
+.random-btn:active {
+  background-color: #8d3887;
+  box-shadow: 0px 0px 2px 1px #4158D0;
 }

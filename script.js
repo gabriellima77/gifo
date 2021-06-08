@@ -1,13 +1,13 @@
+import createTranding from './src/trending.js';
+import getRandom from './src/random.js';
+
+
 window.onload = ()=> {
   const form = document.querySelector('#searchBar');
-  const box = document.querySelector('#container');
+  const main = document.querySelector('main');
   const search = document.querySelector('#search');
   const typeInput = document.querySelector('.type input');
-  const content = document.querySelector('#content');
-  const changeBtn = document.querySelector('.change');
-  const prev = document.querySelector('.prev');
-  const next = document.querySelector('.next');
-  let slideIndex = 0;
+
 
   form.onsubmit = (e)=> {
     e.preventDefault() ;
@@ -16,76 +16,22 @@ window.onload = ()=> {
     searchEvent(str, type)
   };
 
-  next.addEventListener('click', nextSlide);
-  prev.addEventListener('click', prevSlide);
-  changeBtn.addEventListener('click', changeSlide);
-
-  function removeContent() {
-    const children = [...content.children];
-    children.forEach((child)=> {
-      content.removeChild(child);
-    })
-  }
-
-  function changeSlide(e) {
-    const sliderContainer = document.querySelector('.slider');
-    const children = sliderContainer.querySelectorAll('.slide');
-    const moreBtn = document.querySelector('.more');
-    children.forEach((child)=> sliderContainer.removeChild(child));
-    const text = e.target.textContent;
-    createTrandingSlider(sliderContainer, text);
-    e.target.textContent = (text === 'stickers')? 'gifs': 'stickers';
-    moreBtn.textContent = (text === 'stickers')? 'All The Stickers >': 'All The Gifs >';
-  }
-
-  function nextSlide(e) {
-    const slider = document.querySelector('.slider');
-    const slides = slider.querySelectorAll('.slide');
-    const valueMax = slides.length;
-
-    prev.classList.remove('disabled');
-    if(slideIndex >= valueMax - 2) {
-      e.target.classList.add('disabled');
-    } else if(slideIndex >= valueMax -1) return;
-
-    const value = slides[slideIndex].clientWidth;
-    slideIndex++;
-    let lastValue = 0;
-
-    if(slider.style.transform) {
-      lastValue = +slider.style.transform.match(/[0-9]+/)[0];
-    }
-    const newValue = -(value+10) - lastValue;
-    slider.style.transform = `translateX(${newValue}px)`;
-    
-  }
-
-  function prevSlide(e) {
-    const slider = document.querySelector('.slider');
-    const slides = slider.querySelectorAll('.slide');
-
-
-    next.classList.remove('disabled');
-    if(slideIndex <= 0) return;
-    else if (slideIndex <= 1) e.target.classList.add('disabled');
-    const value = slides[slideIndex-1].clientWidth;
-    slideIndex--;
-    let lastValue = 0;
-    if(slider.style.transform) {
-      lastValue = +slider.style.transform.match(/[0-9]+/)[0];
-    }
-    const newValue = -lastValue + (value+10);
-    slider.style.transform = `translateX(${newValue}px)`;
+  function getColor() {
+    const colors = ['#E7F2F8', '#74BDCB', '#FFA384', '#EFE7BC'];
+    const index = Math.floor(Math.random() * colors.length);
+    return colors[index];
   }
 
   function createImage(image) {
+    const bkColor = getColor();
     const figure = document.createElement('figure');
     const i = document.createElement('img');
     i.src = image.url;
-    i.style.width = image.width + 'px';
+    i.style.width = 15  + 'vw';
     i.style.height = image.height + 'px';
     
     figure.classList.add('slide');
+    figure.style.backgroundColor = bkColor;
     figure.appendChild(i);
 
     return figure;
@@ -96,45 +42,100 @@ window.onload = ()=> {
     return str.substring(0, index);
   }
 
+  function getLeft(index) {
+    const figures = document.querySelectorAll('#content .slide');
+    let left = 0;
+    if(index % 4 > 0) {
+      const lastLeft = +figures[index - 1].style.left.match(/-*[0-9]+/)[0];
+      left = lastLeft + 17;
+    }
+    return left + 'vw';
+  }
+
+  function getTop(index) {
+    const imgs = document.querySelectorAll('#content .slide img');
+    const figures = document.querySelectorAll('#content .slide');
+    let top = 60;
+    if(index > 3) {
+      const height = +imgs[index - 4].style.height.match(/[0-9]+/)[0];
+      const lastTop = +figures[index - 4].style.top.match(/[0-9]+/)[0];
+      top = lastTop + height + 17;
+    }
+    return top + 'px';
+  }
+
+  function putImage(index, data) {
+    const img = data.images.fixed_width;
+    const title = getTitle(data.title);
+    const figure = createImage(img);
+    const figCaption = document.createElement('figcaption');
+    if(title === 'New Media Art' ) console.log(data.images.original.url);
+    figCaption.textContent = title;
+    figCaption.classList.add('cap');
+    figure.appendChild(figCaption);
+    
+    figure.classList.add('content');
+    figure.style.top = getTop(index);
+    figure.style.left = getLeft(index);
+
+    content.appendChild(figure);
+  }
+
+  function removeTranding() {
+    const container = document.querySelector('#container');
+    if(container) main.removeChild(container);
+  }
+
+  function removeNFound() {
+    const h3 = document.querySelector('main h3');
+    const error = document.querySelector('.error');
+    if(h3){
+      main.removeChild(h3);
+      main.removeChild(error);
+    }
+  }
+ 
+  function nothingFound() {
+    const hasError = document.querySelector('.error');
+    if(hasError) return;
+    const img = document.createElement('img');
+    const h3 = document.createElement('h3');
+    h3.textContent = 'Nothing Found!';
+    h3.style.color = 'white';
+    img.src = 'https://media0.giphy.com/media/iN1aMj0XwhsNq/giphy.gif?cid=a8f29b90m3092qnn8rvk1sac0mzugoo0yhack9bvxi5vwf2u&rid=giphy.gif&ct=g';
+    img.classList.add('error');
+    main.appendChild(h3);
+    main.appendChild(img);
+  }
+
+  function createHeader(text, content) {
+    const h2 = document.createElement('h2');
+    h2.textContent = text;
+    h2.classList.add('text')
+    content.appendChild(h2);
+  }
+
   function searchEvent(str, isSticker) {
-    removeContent();
+    removeTranding();
+    const hasContent = document.querySelector('#content');
+    if(hasContent) main.removeChild(hasContent);
+
+    const content = document.createElement('section');
+    content.id = 'content';
+    main.appendChild(content);
     let type = 'gifs';
     if(isSticker) type = 'stickers'; 
     let dataPromise = getData(str, type);
     dataPromise.then((response)=> {
+      if(response.data.length < 1) nothingFound();
+      else {
+        removeNFound();
+        createHeader(str, content);
+      }
       response.data.forEach((data, index)=>{
-        let top = 0;
-        if(index % 4 === 0 && index > 0) {
-          const heightB = +response.data[index - 4].images.fixed_width.height;
-          const heightA = +data.images.fixed_width.height;
-          if(heightA < heightB) {
-            top = heightB - heightA;
-          }
-          
-        }
-        const img = data.images.fixed_width;
-        const title = getTitle(data.title);
-        const figure = createImage(img);
-        const figCaption = document.createElement('figcaption');
-
-        figCaption.textContent = title;
-        figCaption.classList.add('cap');
-        figure.appendChild(figCaption);
-        
-        figure.style.top = -top + 'px';
-
-        content.appendChild(figure);
+        putImage(index, data);
       })
     }).catch((err)=>{ console.log(err) });
-  }
-
-  function getTranding(type) {
-    return fetch(`https://api.giphy.com/v1/${type}/trending?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA`, { mode: 'cors' })
-      .then((response)=> {
-        return response.json();
-      }).catch((err)=> {
-        console.log(err);
-      });
   }
 
   function getData(str, type){
@@ -146,22 +147,10 @@ window.onload = ()=> {
       });
   }
 
-  function createTrandingSlider(container, type) {
-    const promise = getTranding(type);
-    promise.then((data)=> {
-      data.data.forEach((img, index)=>{
-        if(index > 20) return;
-        const image = img.images.fixed_height;
-        const figure = createImage(image);
-
-        container.appendChild(figure);
-      });
-    });
-  }
-
   function init() {
-    const sliderContainer = document.querySelector('.slider');
-    createTrandingSlider(sliderContainer, 'gifs');
+    const tranding = createTranding();
+    main.appendChild(tranding);
+    getRandom();
   }
 
   init();
