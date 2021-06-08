@@ -111,7 +111,7 @@ function createSlider(container) {
   const nextSpan = document.createElement('span');
 
   slider.classList.add('slider');
-  prevSpan.classList = 'prev desabled';
+  prevSpan.classList = 'prev disabled';
   nextSpan.classList.add('next');
 
   prevSpan.innerHTML = '<i class="fas fa-chevron-left"></i>';
