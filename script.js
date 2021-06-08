@@ -85,6 +85,12 @@ window.onload = ()=> {
     if(container) main.removeChild(container);
   }
 
+  function removeRImg() {
+    const randomImg = document.querySelector('.random-img');
+    const body = document.querySelector('body');
+    if(randomImg) body.removeChild(randomImg);
+  }
+
   function removeNFound() {
     const h3 = document.querySelector('main h3');
     const error = document.querySelector('.error');
@@ -128,6 +134,7 @@ window.onload = ()=> {
     dataPromise.then((response)=> {
       if(response.data.length < 1) nothingFound();
       else {
+        removeRImg();
         removeNFound();
         createHeader(str, content);
       }
