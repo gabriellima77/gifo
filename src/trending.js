@@ -15,7 +15,6 @@ function createImage(image) {
 
 function changeSlide(e) {
   slideIndex = 0;
-  console.log(1);
   const sliderContainer = document.querySelector('.slider');
   const children = sliderContainer.querySelectorAll('.slide');
   const moreBtn = document.querySelector('.more');

@@ -69,7 +69,6 @@ window.onload = ()=> {
     const title = getTitle(data.title);
     const figure = createImage(img);
     const figCaption = document.createElement('figcaption');
-    if(title === 'New Media Art' ) console.log(data.images.original.url);
     figCaption.textContent = title;
     figCaption.classList.add('cap');
     figure.appendChild(figCaption);

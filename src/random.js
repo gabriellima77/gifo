@@ -26,7 +26,6 @@
       return result.json();
     })
     .then((data)=> {
-      console.log(1);
       const img = document.querySelector('.random-img .slide img');
       const title = document.querySelector('.random-img h3');
       title.textContent = data.data.title;
@@ -50,7 +49,6 @@
 
     h3.style.color = 'white';
     h3.textContent = str;
-    console.log(str);
     container.appendChild(h3);
     container.classList.add('random-img');
     return container;
