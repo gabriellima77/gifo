@@ -1,3 +1,4 @@
+import image from './image.js';
 let slideIndex = 0;
 
 function createImage(image) {
@@ -80,6 +81,41 @@ function putEvents(next, prev) {
   });
 }
 
+function removeTranding() {
+  const main = document.querySelector('main');
+  const container = document.querySelector('#container');
+  if(container) main.removeChild(container);
+}
+
+function removeRImg() {
+  const randomImg = document.querySelector('.random-img');
+  const body = document.querySelector('body');
+  if(randomImg) body.removeChild(randomImg);
+}
+
+function moreEvent() {
+  const main = document.querySelector('main');
+  let type = document.querySelector('.change').textContent;
+  type = (type === 'gifs')? 'stickers': 'gifs';
+
+  removeTranding();
+  removeRImg();
+
+  const content = document.createElement('section');
+  content.id = 'content';
+  main.appendChild(content);
+  const h2 = document.createElement('h2');
+  h2.classList.add('text');
+  h2.textContent = 'Trending';
+  getTranding(type)
+    .then(( response )=> {
+      content.appendChild(h2);
+      response.data.forEach((data, index)=> {
+        image.putImage(index, data);
+      });
+    });
+}
+
 function createBar() {
   const bar = document.createElement('div');
   const title = document.createElement('h2');
@@ -94,6 +130,8 @@ function createBar() {
 
   changeBtn.textContent = 'stickers';
   moreBtn.textContent = 'All The Gifs';
+
+  moreBtn.addEventListener('click', moreEvent);
 
   bar.classList.add('bar');
   changeBtn.addEventListener('click', changeSlide);

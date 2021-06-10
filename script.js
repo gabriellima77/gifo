@@ -1,5 +1,6 @@
 import createTranding from './src/trending.js';
 import getRandom from './src/random.js';
+import image from './src/image.js';
 
 
 window.onload = ()=> {
@@ -15,70 +16,6 @@ window.onload = ()=> {
     const type = typeInput.checked;
     searchEvent(str, type)
   };
-
-  function getColor() {
-    const colors = ['#E7F2F8', '#74BDCB', '#FFA384', '#EFE7BC'];
-    const index = Math.floor(Math.random() * colors.length);
-    return colors[index];
-  }
-
-  function createImage(image) {
-    const bkColor = getColor();
-    const figure = document.createElement('figure');
-    const i = document.createElement('img');
-    i.src = image.url;
-    i.style.width = 15  + 'vw';
-    i.style.height = image.height + 'px';
-    
-    figure.classList.add('slide');
-    figure.style.backgroundColor = bkColor;
-    figure.appendChild(i);
-
-    return figure;
-  }
-
-  function getTitle(str) {
-    const index = str.indexOf(' GIF');
-    return str.substring(0, index);
-  }
-
-  function getLeft(index) {
-    const figures = document.querySelectorAll('#content .slide');
-    let left = 0;
-    if(index % 4 > 0) {
-      const lastLeft = +figures[index - 1].style.left.match(/-*[0-9]+/)[0];
-      left = lastLeft + 17;
-    }
-    return left + 'vw';
-  }
-
-  function getTop(index) {
-    const imgs = document.querySelectorAll('#content .slide img');
-    const figures = document.querySelectorAll('#content .slide');
-    let top = 60;
-    if(index > 3) {
-      const height = +imgs[index - 4].style.height.match(/[0-9]+/)[0];
-      const lastTop = +figures[index - 4].style.top.match(/[0-9]+/)[0];
-      top = lastTop + height + 17;
-    }
-    return top + 'px';
-  }
-
-  function putImage(index, data) {
-    const img = data.images.fixed_width;
-    const title = getTitle(data.title);
-    const figure = createImage(img);
-    const figCaption = document.createElement('figcaption');
-    figCaption.textContent = title;
-    figCaption.classList.add('cap');
-    figure.appendChild(figCaption);
-    
-    figure.classList.add('content');
-    figure.style.top = getTop(index);
-    figure.style.left = getLeft(index);
-
-    content.appendChild(figure);
-  }
 
   function removeTranding() {
     const container = document.querySelector('#container');
@@ -122,6 +59,7 @@ window.onload = ()=> {
 
   function searchEvent(str, isSticker) {
     removeTranding();
+    removeRImg();
     const hasContent = document.querySelector('#content');
     if(hasContent) main.removeChild(hasContent);
 
@@ -134,14 +72,18 @@ window.onload = ()=> {
     dataPromise.then((response)=> {
       if(response.data.length < 1) nothingFound();
       else {
-        removeRImg();
         removeNFound();
         createHeader(str, content);
       }
       response.data.forEach((data, index)=>{
-        putImage(index, data);
-      })
-    }).catch((err)=>{ console.log(err) });
+        image.putImage(index, data);
+      });
+    }).catch((err)=>{
+      console.log(err);
+      removeRImg();
+      removeNFound();
+      nothingFound();
+    });
   }
 
   function getData(str, type){
