@@ -20,6 +20,10 @@ main {
   width: 100%;
 }
 
+.header a{
+  text-decoration: none;
+}
+
 .header {
   padding: 10px 0;
   display: flex;
