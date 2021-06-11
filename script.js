@@ -57,7 +57,7 @@ window.onload = ()=> {
     content.appendChild(h2);
   }
 
-  function searchEvent(str, isSticker) {
+  async function searchEvent(str, isSticker) {
     removeTranding();
     removeRImg();
     const hasContent = document.querySelector('#content');
@@ -66,33 +66,31 @@ window.onload = ()=> {
     const content = document.createElement('section');
     content.id = 'content';
     main.appendChild(content);
+
     let type = 'gifs';
     if(isSticker) type = 'stickers'; 
-    let dataPromise = getData(str, type);
-    dataPromise.then((response)=> {
-      if(response.data.length < 1) nothingFound();
-      else {
-        removeNFound();
-        createHeader(str, content);
-      }
-      response.data.forEach((data, index)=>{
-        image.putImage(index, data);
-      });
-    }).catch((err)=>{
+    const response = await getData(str, type).catch((err)=>{
       console.log(err);
       removeRImg();
       removeNFound();
       nothingFound();
     });
+
+
+    if(response.data.length < 1) nothingFound();
+    else {
+        removeNFound();
+        createHeader(str, content);
+    }
+    
+    response.data.forEach((data, index)=>{
+        image.putImage(index, data);
+    });
   }
 
-  function getData(str, type){
-    return fetch(`https://api.giphy.com/v1/${type}/search?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA&q=${str}`, {mode: 'cors'})
-      .then((result)=> {
-        return result.json();
-      }).catch((err)=> {
-        console.log(err);
-      });
+  async function getData(str, type){
+    const result = await fetch(`https://api.giphy.com/v1/${type}/search?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA&q=${str}`, {mode: 'cors'})
+    return result.json();
   }
 
   function init() {

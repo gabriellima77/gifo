@@ -1,18 +1,6 @@
 import image from './image.js';
 let slideIndex = 0;
 
-function createImage(image) {
-  const figure = document.createElement('figure');
-  const i = document.createElement('img');
-  i.src = image.url;
-  i.style.width = image.width + 'px';
-  i.style.height = image.height + 'px';
-  
-  figure.classList.add('slide')
-  figure.appendChild(i);
-
-  return figure;
-}
 
 function changeSlide(e) {
   slideIndex = 0;
@@ -95,7 +83,7 @@ function removeRImg() {
   if(randomImg) body.removeChild(randomImg);
 }
 
-function moreEvent() {
+async function moreEvent() {
   const main = document.querySelector('main');
   let type = document.querySelector('.change').textContent;
   type = (type === 'gifs')? 'stickers': 'gifs';
@@ -109,13 +97,11 @@ function moreEvent() {
   const h2 = document.createElement('h2');
   h2.classList.add('text');
   h2.textContent = 'Trending';
-  getTranding(type)
-    .then(( response )=> {
-      content.appendChild(h2);
-      response.data.forEach((data, index)=> {
-        image.putImage(index, data);
-      });
-    });
+  const response = await getTranding(type).catch((err)=> { console.log(err) });
+  content.appendChild(h2);
+  response.data.forEach((data, index)=> {
+    image.putImage(index, data);
+  });
 }
 
 function createBar() {
@@ -164,24 +150,20 @@ function createSlider(container) {
   return slider;
 }
 
-function getTranding(type) {
-  return fetch(`https://api.giphy.com/v1/${type}/trending?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA`, { mode: 'cors' })
-    .then((response)=> {
-      return response.json();
-    }).catch((err)=> {
-      console.log(err);
-    });
+async function getTranding(type) {
+  const response =  await fetch(`https://api.giphy.com/v1/${type}/trending?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA`, { mode: 'cors' })
+  return response.json();
+
 }
 
-function createTrandingSlider(container, type) {
-  const promise = getTranding(type);
-  promise.then((data)=> {
-    data.data.forEach((img, index)=>{
+async function createTrandingSlider(container, type) {
+  const data = await getTranding(type)
+    .catch((err)=> { console.log(err) });
+  data.data.forEach((img, index)=>{
       if(index > 20) return;
-      const image = img.images.fixed_height;
-      const figure = createImage(image);
+      const imageContent = img.images.fixed_height;
+      const figure = image.createImage(imageContent);
       container.appendChild(figure);
-    });
   });
 }
 

@@ -1,19 +1,19 @@
 import image from './image.js';
 
 
-function randomEvent() {
-  fetch('https://api.giphy.com/v1/gifs/random?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA')
-  .then((result)=> {
-    return result.json();
-  })
-  .then((data)=> {
+async function randomEvent() {
+  const result = await fetch('https://api.giphy.com/v1/gifs/random?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA');
+  result.json()
+    .then((data)=> {
     const img = document.querySelector('.random-img .slide img');
+    img.style.width = data.data.images.original.width + 'px';
+    img.style.height = data.data.images.original.height + 'px';
     const title = document.querySelector('.random-img h3');
     title.textContent = data.data.title;
     const url = data.data.images.original.url;
     img.src = url;
-  })
-  .catch((err)=>{ console.log(err) });
+    })
+    .catch((err)=>{ console.log(err) });
 }
 
 function createRandomBtn() {
@@ -35,11 +35,9 @@ function createContainer(str) {
   return container;
 }
 
-export default function getRandom() {
-  fetch('https://api.giphy.com/v1/gifs/random?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA')
-    .then((result)=> {
-      return result.json();
-    })
+export default async function getRandom() {
+  const result = await fetch('https://api.giphy.com/v1/gifs/random?api_key=XcI6775d84WUDVBTSbjFbFqdsbFiTsZA');
+  result.json()
     .then((data)=> {
       const body = document.querySelector('body');
       const img = data.data.images.original;
