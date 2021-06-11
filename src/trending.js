@@ -20,6 +20,7 @@ function changeSlide(e) {
   const children = sliderContainer.querySelectorAll('.slide');
   const moreBtn = document.querySelector('.more');
   const prev = document.querySelector('.prev');
+  const next = document.querySelector('.next');
   const text = e.target.textContent;
 
   children.forEach((child)=> sliderContainer.removeChild(child));
@@ -28,8 +29,9 @@ function changeSlide(e) {
   createTrandingSlider(sliderContainer, text);
   e.target.textContent = (text === 'stickers')? 'gifs': 'stickers';
   moreBtn.textContent = (text === 'stickers')? 'All The Stickers >': 'All The Gifs >';
-  sliderContainer.style.transform = 'translateX(0px)'
-  prev.classList.add('disabled');
+  sliderContainer.style.transform = 'translateX(0px)';
+  if(!prev.classList.contains('disabled')) prev.classList.add('disabled');
+  if(next.classList.contains('disabled')) next.classList.remove('disabled');
 }
 
 function nextSlide(e, prev) {
